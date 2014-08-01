@@ -40,11 +40,11 @@ class RoomsSpec extends FlatSpec with Matchers {
     }
 
     it should "return a valid JSON response when specifying start-index" in {
-      rooms.getAll(startIndex = Some(1L))
+      rooms.getAll(startIndex = Some(1))
     }
 
     it should "return a valid JSON response when specifying max-results" in {
-      rooms.getAll(maxResults = Some(1L))
+      rooms.getAll(maxResults = Some(1))
     }
 
     it should "return a valid JSON response when specifying include-archived" in {

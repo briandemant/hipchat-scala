@@ -11,8 +11,9 @@ class AuthSpec extends FlatSpec with Matchers {
   val API_TOKEN_KEY = "com.imadethatcow.hipchat.auth_token"
   val USERNAME = "com.imadethatcow.hipchat.test_username"
   val PASSWORD = "com.imadethatcow.hipchat.test_password"
+  println(config.getString(API_TOKEN_KEY))
   val apiTokenTry = Try(config.getString(API_TOKEN_KEY))
-  if (apiTokenTry.isFailure) fail("Could not find api_token in config")
+  if (apiTokenTry.isFailure) fail("Could not find auth_token in config")
 
   for (apiToken <- apiTokenTry) {
     val auth = new Auth(apiToken)
@@ -47,8 +48,10 @@ class AuthSpec extends FlatSpec with Matchers {
         println(sessionResponse)
       }
     }
-    //"Auth delete session" should "return true" in {
-    //  auth.deleteSession(apiToken) shouldEqual true
-    //}
+    /*
+    "Auth delete session" should "return true" in {
+      auth.deleteSession(apiToken) shouldEqual true
+    }
+    */
   }
 }

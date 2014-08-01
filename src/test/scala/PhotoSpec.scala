@@ -1,5 +1,6 @@
 import com.imadethatcow.hipchat.users.Photos
 import com.typesafe.config.ConfigFactory
+import java.util.concurrent.TimeUnit
 import org.scalatest.{Matchers, FlatSpec}
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global

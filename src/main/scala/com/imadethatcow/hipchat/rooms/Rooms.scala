@@ -10,12 +10,15 @@ import com.imadethatcow.hipchat.common.caseclass.Room
 import com.imadethatcow.hipchat.common.enums.Privacy
 import com.imadethatcow.hipchat.common.enums.Privacy.Privacy
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Success, Try, Failure}
 
 class Rooms(private[this] val apiToken: String)(implicit executor: ExecutionContext) extends Logging {
+
   def create(name: String,
              ownerIdEmailOrMentionName: Option[String] = None,
              guestAccess: Boolean = false,
-             privacy : Privacy = Privacy.public): Future[RoomsCreateResponse] = {
+             privacy: Privacy = Privacy.public): Future[RoomsCreateResponse] = {
+    if (name.length < 1 || name.length > 50) throw new IllegalArgumentException("name valid length range: 1 - 50")
     val room = RoomsCreateRequest(guestAccess, name, ownerIdEmailOrMentionName, privacy.toString)
     val body = mapper.writeValueAsString(room)
     val req = addToken(Rooms.url.POST, apiToken)
@@ -29,8 +32,8 @@ class Rooms(private[this] val apiToken: String)(implicit executor: ExecutionCont
     resolveRequest(req, 204) map { _ => true} recover { case _: Exception => false }
   }
 
-  def getAll(startIndex: Option[Long] = None,
-             maxResults: Option[Long] = None,
+  def getAll(startIndex: Option[Int] = None,
+             maxResults: Option[Int] = None,
              includeArchived: Option[Boolean] = None): Future[Seq[Room]] = {
     var req = addToken(Rooms.url.GET, apiToken)
     for (si <- startIndex) req = req.addQueryParameter("start-index", si.toString)
@@ -80,7 +83,7 @@ private object Rooms {
   val url = apiUrl / "room"
   private def url(roomIdOrName: Any) = roomIdOrName match {
     case _: Long | _: String =>
-      apiUrl / "room" / roomIdOrName.toString
+      url / roomIdOrName.toString
   }
   def urlPut(roomIdOrName: Any) = url(roomIdOrName).PUT
   def urlGet(roomIdOrName: Any) = url(roomIdOrName).GET

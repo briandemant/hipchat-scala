@@ -8,7 +8,7 @@ import scala.concurrent.duration.Duration
 import scala.util.Try
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class RoomNotifierSpec extends FlatSpec {
+class RoomNotifierSpec extends FlatSpec with Matchers {
   val config = ConfigFactory.load
   val API_TOKEN_KEY = "com.imadethatcow.hipchat.auth_token"
   val TEST_ROOM_KEY = "com.imadethatcow.hipchat.test_room"
@@ -23,22 +23,22 @@ class RoomNotifierSpec extends FlatSpec {
 
     "Room notification" should "not fail" in {
       val fut = notifier.sendNotification(room, message)
-      Await.result(fut, Duration.Inf)
+      Await.result(fut, Duration.Inf) shouldEqual true
     }
 
     it should "not fail when specifying a color" in {
       val fut = notifier.sendNotification(room, message, color = Color.random)
-      Await.result(fut, Duration.Inf)
+      Await.result(fut, Duration.Inf) shouldEqual true
     }
 
     it should "not fail when specifying notify" in {
       val fut = notifier.sendNotification(room, message, notify = true)
-      Await.result(fut, Duration.Inf)
+      Await.result(fut, Duration.Inf) shouldEqual true
     }
 
     it should "not fail when specifying message format" in {
       val fut = notifier.sendNotification(room, message, messageFormat = MessageFormat.text)
-      Await.result(fut, Duration.Inf)
+      Await.result(fut, Duration.Inf) shouldEqual true
     }
   }
 }

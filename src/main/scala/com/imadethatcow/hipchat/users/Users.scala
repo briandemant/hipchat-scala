@@ -7,9 +7,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class Users(private[this] val apiToken: String)(implicit executor: ExecutionContext) extends Logging {
   def getAll(startIndex: Option[Long] = None,
-          maxResults: Option[Long] = None,
-          includeGuests: Option[Boolean] = None,
-          includeDeleted: Option[Boolean] = None): Future[Seq[User]] = {
+             maxResults: Option[Long] = None,
+             includeGuests: Option[Boolean] = None,
+             includeDeleted: Option[Boolean] = None): Future[Seq[User]] = {
     var req = addToken(Users.url, apiToken)
     for (si <- startIndex) req = req.addQueryParameter("start-index", si.toString)
     for (mr <- maxResults) req = req.addQueryParameter("max-results", mr.toString)
@@ -22,10 +22,19 @@ class Users(private[this] val apiToken: String)(implicit executor: ExecutionCont
       }
     }
   }
+
+  def create(name: String,
+             title: String = "",
+             mentionName: String = "",
+             isGroupAdmin: Boolean = false,
+             timezone) = {
+
+  }
 }
 
 object Users {
-  val url = (apiUrl / "user").GET
+  val url = apiUrl / "user"
+  val urlPost = url.POST
 }
 
 
